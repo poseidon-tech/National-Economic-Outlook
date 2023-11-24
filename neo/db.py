@@ -3,8 +3,8 @@ import os
 
 
 def initialize_db(app):
-    username = 'HARSHITH.KUMAR'
-    password = 'WLsLZEaAh0DDmrXNCiULlCGp'
+    username = os.environ.get('DB_USERNAME')
+    password = os.environ.get('WLsLZEaAh0DDmrXNCiULlCGp')
     hostname = os.environ.get('DB_HOSTNAME')
     port = os.environ.get('DB_PORT')
     service_name = 'orcl'
@@ -17,6 +17,5 @@ def initialize_db(app):
             SELECT * FROM State""")
         results = cursor.fetchall()
         print(results)
-        print("PRINTED ONCE")
 
     app.config['DB_CONN'] = conn
