@@ -4,7 +4,7 @@ import os
 
 def initialize_db(app):
     username = os.environ.get('DB_USERNAME')
-    password = os.environ.get('WLsLZEaAh0DDmrXNCiULlCGp')
+    password = os.environ.get('DB_PASSWORD')
     hostname = os.environ.get('DB_HOSTNAME')
     port = os.environ.get('DB_PORT')
     service_name = 'orcl'
