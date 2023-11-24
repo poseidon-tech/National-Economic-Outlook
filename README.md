@@ -33,6 +33,7 @@ It's already part of gitignore but since the base copy exists in the repo, run t
 git update-index --skip-worktree neo/.env
 
 Update your credentials like database username and password in the file.
+DO NOT forget to connect to the VPN since we're using cise oracle.
 
 # Flask Run
 flask --app neo run --debug
