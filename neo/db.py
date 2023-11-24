@@ -14,7 +14,7 @@ def initialize_db(app):
 
     with conn.cursor() as cursor:
         cursor.execute("""
-            SELECT * FROM State""")
+            SELECT * FROM "HARSHITH.KUMAR".State""")
         results = cursor.fetchall()
         print(results)
 
