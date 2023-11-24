@@ -30,7 +30,7 @@ pip install -r requirements.txt
 There's a .env file in the neo directory. 
 It's already part of gitignore but since the base copy exists in the repo, run the below git command to make sure it's untracked
 
-git update-index --skip-worktree <path_to_env_file> (something like neo/.env)
+git update-index --skip-worktree neo/.env
 
 Update your credentials like database username and password in the file.
 
