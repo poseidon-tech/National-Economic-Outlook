@@ -21,8 +21,10 @@ def create_app():
 
 
 def register_blueprints(app: Flask):
+    from neo.query import count_query
     from neo.query import query1
 
     app.register_blueprint(query1.bp)
+    app.register_blueprint(count_query.bp)
 
 
