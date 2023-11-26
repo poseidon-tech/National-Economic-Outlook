@@ -22,7 +22,7 @@ def create_app():
 
 def register_blueprints(app: Flask):
     from neo.query import query1
-
+    from neo.query import query4
     app.register_blueprint(query1.bp)
-
+    app.register_blueprint(query4.bp)
 
