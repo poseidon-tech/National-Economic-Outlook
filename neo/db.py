@@ -14,7 +14,7 @@ def initialize_db(app):
 
     with conn.cursor() as cursor:
         cursor.execute("""
-            SELECT * FROM "HARSHITH.KUMAR".State
+            SELECT name FROM "HARSHITH.KUMAR".State
             FETCH FIRST 1 ROWS ONLY""")
         results = cursor.fetchall()
         print(results)
