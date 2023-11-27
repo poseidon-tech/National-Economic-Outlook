@@ -72,10 +72,10 @@ def get_query1_range():
     SELECT MAX(min), MIN(max) 
     FROM
         (SELECT MAX(year) as max, MIN(year) as min
-        FROM Gdp
+        FROM "HARSHITH.KUMAR".Gdp
         UNION
         SELECT MAX(year) as max, MIN(year) as min
-        FROM Industry)
+        FROM "HARSHITH.KUMAR".Industry)
     """)
     results = cursor.fetchall()
 

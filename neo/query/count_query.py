@@ -13,40 +13,40 @@ def fetch_total_count():
     cursor = conn.cursor()
 
     cursor.execute("""
-    SELECT COUNT(*) FROM State""")
+    SELECT COUNT(*) FROM "HARSHITH.KUMAR".State""")
     state_count = cursor.fetchone()[0]
     cursor.execute("""
-        SELECT COUNT(*) FROM County""")
+        SELECT COUNT(*) FROM "HARSHITH.KUMAR".County""")
     county_count = cursor.fetchone()[0]
     cursor.execute("""
-            SELECT COUNT(*) FROM County_Fips""")
+            SELECT COUNT(*) FROM "HARSHITH.KUMAR".County_Fips""")
     county_fips_count = cursor.fetchone()[0]
     cursor.execute("""
-            SELECT COUNT(*) FROM Unemployment""")
+            SELECT COUNT(*) FROM "HARSHITH.KUMAR".Unemployment""")
     unemployment_count = cursor.fetchone()[0]
     cursor.execute("""
-            SELECT COUNT(*) FROM Poverty""")
+            SELECT COUNT(*) FROM "HARSHITH.KUMAR".Poverty""")
     poverty_count = cursor.fetchone()[0]
     cursor.execute("""
-            SELECT COUNT(*) FROM Crime""")
+            SELECT COUNT(*) FROM "HARSHITH.KUMAR".Crime""")
     crime_count = cursor.fetchone()[0]
     cursor.execute("""
-            SELECT COUNT(*) FROM Homelessness""")
+            SELECT COUNT(*) FROM "HARSHITH.KUMAR".Homelessness""")
     homelessness_count = cursor.fetchone()[0]
     cursor.execute("""
-            SELECT COUNT(*) FROM Mortgage""")
+            SELECT COUNT(*) FROM "HARSHITH.KUMAR".Mortgage""")
     mortgage_count = cursor.fetchone()[0]
     cursor.execute("""
-                SELECT COUNT(*) FROM Industry""")
+                SELECT COUNT(*) FROM "HARSHITH.KUMAR".Industry""")
     industry_count = cursor.fetchone()[0]
     cursor.execute("""
-                SELECT COUNT(*) FROM Gdp""")
+                SELECT COUNT(*) FROM "HARSHITH.KUMAR".Gdp""")
     gdp_count = cursor.fetchone()[0]
     cursor.execute("""
-                    SELECT COUNT(*) FROM Industry_Category""")
+                    SELECT COUNT(*) FROM "HARSHITH.KUMAR".Industry_Category""")
     industry_category_count = cursor.fetchone()[0]
     cursor.execute("""
-                        SELECT COUNT(*) FROM Demographic""")
+                        SELECT COUNT(*) FROM "HARSHITH.KUMAR".Demographic""")
     demographic_count = cursor.fetchone()[0]
     cursor.close()
 
