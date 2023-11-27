@@ -232,3 +232,79 @@ WHERE
 GROUP BY 
     s.name
 """
+
+Poverty_Demographics_Query = """
+
+    SELECT 
+    Demo_T.Year,Demo_T.State_Name,
+    Demo_T.State_Code,
+    Demo_T.Total_Population,
+    Demo_T.total_african_american_population_percentage,
+    Demo_T.total_american_indian_population_percentage,
+    Demo_T.total_caucasian_population_percentage,
+    Demo_T.total_asian_american_population_percentage,
+    Demo_T.total_hawaiian_population_percentage,
+    Demo_T.total_hispanic_population_percentage,
+    Demo_T.total_non_hispanic_population_percentage,
+    Poverty_T.total_poverty,
+    ROUND((Poverty_T.total_poverty / Demo_T.total_population)*100,2) as total_poverty_percentage,
+    Poverty_T.total_poverty_under_18,
+    ROUND((Poverty_T.total_poverty_under_18 / Demo_T.total_population_under_18)*100,2) as total_poverty_under_18_percentage,
+    Poverty_T.total_poverty_over_18,
+    ROUND((Poverty_T.total_poverty_over_18 / Demo_T.total_population_over_18)*100,2) as total_poverty_over_18_percentage,
+    Poverty_T.Average_HouseHold_Income
+    FROM (
+         ( SELECT P.year as year,S.name as State_Name,S.Fips as State_Code,
+            SUM(P.poverty_estimate_all) as total_poverty,
+            SUM(P.poverty_estimate_age_0_17) as total_poverty_under_18,
+            SUM((P.poverty_estimate_all - P.poverty_estimate_age_0_17)) as total_poverty_over_18,
+            ROUND(AVG(P.median_household_income),2) as Average_HouseHold_Income 
+            FROM 
+                "HARSHITH.KUMAR".Poverty P
+            INNER JOIN 
+                 "HARSHITH.KUMAR".County_Fips CF
+            ON 
+                P.county_fips = CF.fips
+            INNER JOIN 
+                "HARSHITH.KUMAR".State S
+            ON
+                S.fips = CF.state_fips  
+            GROUP BY
+                    S.fips,P.year,S.name
+            ORDER BY 
+                   P.year,S.name  
+            ) Poverty_T
+            INNER JOIN
+                ( SELECT Demo.year as year,S.name as State_Name,S.fips as State_Code,
+                    SUM(Demo.total) as total_population,
+                    SUM(Demo.overall_0_4 + Demo.overall_5_17) AS total_population_under_18,
+                    SUM(Demo.overall_18_24 + Demo.overall_25_44 + Demo.overall_45_64 + Demo.overall_65) as total_population_over_18,
+                    ROUND(SUM(Demo.african_american)/SUM(Demo.total)*100,2) as total_african_american_population_percentage,
+                    ROUND(SUM(Demo.american_indian)/SUM(Demo.total)*100,2) as total_american_indian_population_percentage,
+                    
+                    ROUND(SUM(Demo.caucasian)/SUM(Demo.total)*100,2) as total_caucasian_population_percentage,
+                    ROUND(SUM(Demo.asian_american)/SUM(Demo.total)*100,2) as total_asian_american_population_percentage,
+                    ROUND(SUM(Demo.hawaiian)/SUM(Demo.total)*100,2) as total_hawaiian_population_percentage,
+                    ROUND(SUM(Demo.hispanic)/SUM(Demo.total)*100,2) as total_hispanic_population_percentage,
+                    ROUND(SUM(Demo.non_hispanic)/SUM(Demo.total)*100,2) as total_non_hispanic_population_percentage
+                    FROM
+                        "HARSHITH.KUMAR".Demographic Demo    
+                    INNER JOIN 
+                        "HARSHITH.KUMAR".County_Fips CF
+                    ON 
+                        Demo.county_fips = CF.fips
+                    INNER JOIN 
+                        "HARSHITH.KUMAR".State S
+                    ON
+                        S.fips = CF.state_fips
+                        
+                    GROUP BY
+                        Demo.year,S.name,S.fips
+                    ORDER BY 
+                        Demo.year,S.name  
+                ) DEMO_T
+            ON Poverty_T.State_Name = Demo_T.State_Name AND Poverty_T.State_Code = Demo_T.State_Code AND Poverty_T.year = Demo_T.year          
+    ) WHERE Demo_T.State_Name = '{state}' AND Demo_T.year >= {start_year} AND Demo_T.year <= {end_year}
+
+
+"""
