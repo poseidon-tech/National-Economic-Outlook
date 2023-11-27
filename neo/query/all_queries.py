@@ -215,7 +215,7 @@ SELECT
     ROUND(AVG(((c.larceny)/d.total) *10000),2) AS total_larceny_rate_05_19,
     ROUND(AVG(((c.motor_vechile_theft)/d.total) *10000),2) AS total_motor_vechile_theft_rate_05_19,
     ROUND(AVG(((c.arson)/d.total) *10000),2) AS total_arson_rate_05_19,
-    AVG(((c.murder + c.rape + c.robbery + c.aggravated_assault + c.burglary + c.larceny + c.motor_vechile_theft + c.arson)/d.total) *1000) AS total_crime_rate_05_19,
+    ROUND(AVG(((c.murder + c.rape + c.robbery + c.aggravated_assault + c.burglary + c.larceny + c.motor_vechile_theft + c.arson)/d.total) *1000),2) AS total_crime_rate_05_19,
     ROUND(AVG((u.unemployed / (u.employed + u.unemployed)) * 100), 2) AS total_unemployment_rate_05_19
 FROM 
     "HARSHITH.KUMAR".crime c
