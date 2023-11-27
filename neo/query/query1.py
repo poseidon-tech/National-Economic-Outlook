@@ -9,35 +9,34 @@ bp = Blueprint('query1', __name__, url_prefix='/query1')
 
 @bp.route('', methods=['GET'])
 def fetch_industry_gdp_relation():
-    states = request.args.get('states')
+    state = request.args.get('state')
     industries = request.args.get('naics')
     start_year = request.args.get('start_year')
     end_year = request.args.get('end_year')
 
-    states_list = [state.strip() for state in states.split(',')] if states else []
     industries_list = [industry.strip() for industry in industries.split(',')] if industries else []
-    bind_states = ",".join(":" + str(i + 1) for i in range(len(states_list)))
-    bind_industries = ",".join(":" + str(len(states_list) + i + 1) for i in range(len(industries_list)))
-    q = Industry_Gdp_Query.format(bind_states=bind_states, bind_industries=bind_industries, start_year=start_year,
+    bind_industries = ",".join(":" + str(i + 1) for i in range(len(industries_list)))
+    q = Industry_Gdp_Query.format(state=state, bind_industries=bind_industries, start_year=start_year,
                                   end_year=end_year)
 
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
 
-    cursor.execute(q, states_list + industries_list)
+    cursor.execute(q, industries_list)
     results = cursor.fetchall()
     cursor.close
+    # print(q)
     print(results)
 
     response_data = {}
     for result in results:
         year = result[0]
         industry = result[1]
-        gdp = result[3]
-        growth = result[4]
+        gdp = result[2]
+        growth = result[3]
 
         if year not in response_data:
-            response_data[year] = {"year": year, "gdp": result[3]}
+            response_data[year] = {"year": year, "gdp": gdp}
 
         response_data[year][industry] = growth
 
