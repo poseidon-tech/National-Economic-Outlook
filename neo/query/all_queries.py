@@ -125,7 +125,7 @@ SELECT
     ROUND(AVG(((c1.arson)/d1.total) *10000),2) AS arson_rate_per_year,
     ROUND(AVG(((c1.murder + c1.rape + c1.robbery + c1.aggravated_assault + c1.burglary + c1.larceny + c1.motor_vechile_theft + c1.arson)/d1.total) *1000),2) AS crime_rate_per_year,
     SUM(c1.murder + c1.rape + c1.robbery + c1.aggravated_assault) AS total_violent_crime_year,
-    SUM(c1.burglary + c1.larceny + c1.motor_vechile_theft + c1.arson) AS total_violent_crime_year,
+    SUM(c1.burglary + c1.larceny + c1.motor_vechile_theft + c1.arson) AS total_non_violent_crime_year,
     ROUND(AVG((u1.unemployed / (u1.employed + u1.unemployed)) * 100),2) AS unemployment_rate_per_year,
     total_murder_rate_05_19 AS murder_rate_frm_2005_2019,
     total_rape_rate_05_19 AS rape_rate_frm_2005_2019,
