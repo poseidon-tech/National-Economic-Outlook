@@ -2,6 +2,8 @@ from flask import current_app as app
 from flask import jsonify, request
 from flask import Blueprint
 from neo.query.all_queries import Crime_Unemployment_Query
+from neo.query.all_queries import Crime_Unemployment_Query_Overall
+import neo.query.utils as utils
 import neo.query.utils as utils
 
 bp = Blueprint('query4', __name__, url_prefix='/query4')
@@ -39,17 +41,6 @@ def fetch_unemployment_crime_relation():
         total_violent_crime_year = float(result[11])
         total_non_violent_crime_year = float(result[12])
         unemployment_rate_per_year = float(result[13])
-        murder_rate_frm_2005_2019 = float(result[14])
-        rape_rate_frm_2005_2019 = float(result[15])
-        robbery_rate_frm_2005_2019 = float(result[16])
-        aggravated_assault_rate_frm_2005_2019 = float(result[17])
-        burglary_rate_frm_2005_2019 = float(result[18])
-        larceny_rate_frm_2005_2019 = float(result[19])
-        motor_vechile_theft_rate_frm_2005_2019 = float(result[20])
-        arson_rate_frm_2005_2019 = float(result[21])
-        crime_rate_frm_2005_2019 = float(result[22])
-        unemployment_rate_frm_2005_2019 = float(result[23])
-
 
         record = {
             "state_name": state_name,
@@ -66,6 +57,43 @@ def fetch_unemployment_crime_relation():
             "total_violent_crime_year": total_violent_crime_year,
             "total_non_violent_crime_year": total_non_violent_crime_year,
             "unemployment_rate_per_year": unemployment_rate_per_year,
+        }
+
+        response_data.append(record)
+
+    final_output = sorted(response_data, key=lambda x: x['year'])
+    return jsonify(final_output)
+
+@bp.route('overall', methods=['GET'])
+def fetch_unemployment_crime_overall_relation():
+    states = request.args.get('states')
+    states_list = [state.strip() for state in states.split(',')] if states else []
+    bind_states = ",".join(":" + str(i + 1) for i in range(len(states_list)))
+    q = Crime_Unemployment_Query_Overall.format(bind_states=bind_states)
+    conn = app.config['DB_CONN']
+    cursor = conn.cursor()
+
+    cursor.execute(q, states_list)
+    results = cursor.fetchall()
+    cursor.close
+    print(results)
+
+    response_data = []
+    for result in results:
+        state_name = result[0]
+        murder_rate_frm_2005_2019 = float(result[1])
+        rape_rate_frm_2005_2019 = float(result[2])
+        robbery_rate_frm_2005_2019 = float(result[3])
+        aggravated_assault_rate_frm_2005_2019 = float(result[4])
+        burglary_rate_frm_2005_2019 = float(result[5])
+        larceny_rate_frm_2005_2019 = float(result[6])
+        motor_vechile_theft_rate_frm_2005_2019 = float(result[7])
+        arson_rate_frm_2005_2019 = float(result[8])
+        crime_rate_frm_2005_2019 = float(result[9])
+        unemployment_rate_frm_2005_2019 = float(result[10])
+
+        record = {
+            "state_name": state_name,
             "murder_rate_frm_2005_2019": murder_rate_frm_2005_2019,
             "rape_rate_frm_2005_2019": rape_rate_frm_2005_2019,
             "robbery_rate_frm_2005_2019": robbery_rate_frm_2005_2019,
@@ -80,5 +108,5 @@ def fetch_unemployment_crime_relation():
 
         response_data.append(record)
 
-    final_output = sorted(response_data, key=lambda x: x['year'])
+    final_output = sorted(response_data, key=lambda x: x['state_name'])
     return jsonify(final_output)

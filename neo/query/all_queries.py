@@ -158,31 +158,6 @@ ORDER BY year ASC
 """
 
 Crime_Unemployment_Query = """
-WITH state_crime_overall AS (SELECT
-    s.name AS state_name,
-    ROUND(AVG(((c.murder)/d.total) *10000),2) AS total_murder_rate_05_19,
-    ROUND(AVG(((c.rape)/d.total) *10000),2) AS total_rape_rate_05_19,
-    ROUND(AVG(((c.robbery)/d.total) *10000),2) AS total_robbery_rate_05_19,
-    ROUND(AVG(((c.aggravated_assault)/d.total) *10000),2) AS total_aggravated_assault_rate_05_19,
-    ROUND(AVG(((c.burglary)/d.total) *10000),2) AS total_burglary_rate_05_19,
-    ROUND(AVG(((c.larceny)/d.total) *10000),2) AS total_larceny_rate_05_19,
-    ROUND(AVG(((c.motor_vechile_theft)/d.total) *10000),2) AS total_motor_vechile_theft_rate_05_19,
-    ROUND(AVG(((c.arson)/d.total) *10000),2) AS total_arson_rate_05_19,
-    ROUND(AVG(((c.murder + c.rape + c.robbery + c.aggravated_assault + c.burglary + c.larceny + c.motor_vechile_theft + c.arson)/d.total) *1000),2) AS total_crime_rate_05_19,
-    ROUND(AVG((u.unemployed / (u.employed + u.unemployed)) * 100), 2) AS total_unemployment_rate_05_19
-FROM 
-    "HARSHITH.KUMAR".crime c
-JOIN 
-    "HARSHITH.KUMAR".unemployment u ON c.county_fips = u.county_fips AND c.year = u.year
-JOIN 
-    "HARSHITH.KUMAR".demographic d ON c.county_fips = d.county_fips AND c.year = d.year
-JOIN 
-    "HARSHITH.KUMAR".county_fips cf ON c.county_fips = cf.fips
-JOIN 
-    "HARSHITH.KUMAR".state s ON cf.state_fips = s.fips
-GROUP BY 
-    s.name
-)
 SELECT
     S1.name AS State_Name,
     c1.year AS year,
@@ -197,17 +172,7 @@ SELECT
     ROUND(AVG(((c1.murder + c1.rape + c1.robbery + c1.aggravated_assault + c1.burglary + c1.larceny + c1.motor_vechile_theft + c1.arson)/d1.total) *1000),2) AS crime_rate_per_year,
     SUM(c1.murder + c1.rape + c1.robbery + c1.aggravated_assault) AS total_violent_crime_year,
     SUM(c1.burglary + c1.larceny + c1.motor_vechile_theft + c1.arson) AS total_non_violent_crime_year,
-    ROUND(AVG((u1.unemployed / (u1.employed + u1.unemployed)) * 100),2) AS unemployment_rate_per_year,
-    total_murder_rate_05_19 AS murder_rate_frm_2005_2019,
-    total_rape_rate_05_19 AS rape_rate_frm_2005_2019,
-    total_robbery_rate_05_19 AS robbery_rate_frm_2005_2019,
-    total_aggravated_assault_rate_05_19 AS aggravated_assault_rate_frm_2005_2019,
-    total_burglary_rate_05_19 AS burglary_rate_frm_2005_2019,
-    total_larceny_rate_05_19 AS larceny_rate_frm_2005_2019,
-    total_motor_vechile_theft_rate_05_19 AS motor_vechile_theft_rate_frm_2005_2019,
-    total_arson_rate_05_19 AS arson_rate_frm_2005_2019,
-    total_crime_rate_05_19 AS crime_rate_frm_2005_2019,
-    total_unemployment_rate_05_19 AS unemployment_rate_frm_2005_2019
+    ROUND(AVG((u1.unemployed / (u1.employed + u1.unemployed)) * 100),2) AS unemployment_rate_per_year
     FROM
         "HARSHITH.KUMAR".Crime c1
     JOIN
@@ -228,27 +193,42 @@ SELECT
         "HARSHITH.KUMAR".state s1
     ON
         cf1.state_fips = s1.fips
-    JOIN 
-        state_crime_overall sc
-    ON 
-        s1.name = sc.state_name
     WHERE 
-        s1.name IN({bind_states}) AND
+        s1.name IN ({bind_states}) AND
         c1.year >= {start_year} AND
         c1.year <= {end_year}
     GROUP BY 
         c1.year, 
-        s1.name,
-        total_murder_rate_05_19,
-        total_rape_rate_05_19,
-        total_robbery_rate_05_19,
-        total_aggravated_assault_rate_05_19,
-        total_burglary_rate_05_19,
-        total_larceny_rate_05_19,
-        total_motor_vechile_theft_rate_05_19,
-        total_arson_rate_05_19,
-        total_crime_rate_05_19,
-        total_unemployment_rate_05_19
+        s1.name
     ORDER BY
         c1.year
+"""
+
+Crime_Unemployment_Query_Overall = """
+SELECT
+    s.name AS state_name,
+    ROUND(AVG(((c.murder)/d.total) *10000),2) AS total_murder_rate_05_19,
+    ROUND(AVG(((c.rape)/d.total) *10000),2) AS total_rape_rate_05_19,
+    ROUND(AVG(((c.robbery)/d.total) *10000),2) AS total_robbery_rate_05_19,
+    ROUND(AVG(((c.aggravated_assault)/d.total) *10000),2) AS total_aggravated_assault_rate_05_19,
+    ROUND(AVG(((c.burglary)/d.total) *10000),2) AS total_burglary_rate_05_19,
+    ROUND(AVG(((c.larceny)/d.total) *10000),2) AS total_larceny_rate_05_19,
+    ROUND(AVG(((c.motor_vechile_theft)/d.total) *10000),2) AS total_motor_vechile_theft_rate_05_19,
+    ROUND(AVG(((c.arson)/d.total) *10000),2) AS total_arson_rate_05_19,
+    AVG(((c.murder + c.rape + c.robbery + c.aggravated_assault + c.burglary + c.larceny + c.motor_vechile_theft + c.arson)/d.total) *1000) AS total_crime_rate_05_19,
+    ROUND(AVG((u.unemployed / (u.employed + u.unemployed)) * 100), 2) AS total_unemployment_rate_05_19
+FROM 
+    "HARSHITH.KUMAR".crime c
+JOIN 
+    "HARSHITH.KUMAR".unemployment u ON c.county_fips = u.county_fips AND c.year = u.year
+JOIN 
+    "HARSHITH.KUMAR".demographic d ON c.county_fips = d.county_fips AND c.year = d.year
+JOIN 
+    "HARSHITH.KUMAR".county_fips cf ON c.county_fips = cf.fips
+JOIN 
+    "HARSHITH.KUMAR".state s ON cf.state_fips = s.fips
+WHERE 
+    s.name IN ({bind_states})
+GROUP BY 
+    s.name
 """
