@@ -25,7 +25,7 @@ def fetch_industry_gdp_relation():
     cursor.execute(q, industries_list)
     results = cursor.fetchall()
     cursor.close
-    # print(q)
+
     print(results)
 
     response_data = {}
@@ -34,9 +34,11 @@ def fetch_industry_gdp_relation():
         industry = result[1]
         gdp = result[2]
         growth = result[3]
+        normalized_gdp, unit = utils.normalize_gdp(gdp)
+        print(gdp, normalized_gdp, unit)
 
         if year not in response_data:
-            response_data[year] = {"year": year, "gdp": gdp}
+            response_data[year] = {"year": year, "gdp": normalized_gdp, "unit": unit}
 
         response_data[year][industry] = growth
 
