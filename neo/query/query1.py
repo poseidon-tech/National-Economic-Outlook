@@ -50,16 +50,18 @@ def get_all_states():
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
     cursor.execute("""
-    SELECT name
+    SELECT name, code
     FROM "HARSHITH.KUMAR".State
     """)
 
     results = cursor.fetchall()
     cursor.close()
+    response_json = {}
     for row in results:
-        print(row)
+        response_json[row[0]] = row[1]
 
-    return jsonify({"list_of_states": results})
+
+    return jsonify(response_json)
 
 
 # TODO: Make a common function that accepts table names and returns min, max of all tables
