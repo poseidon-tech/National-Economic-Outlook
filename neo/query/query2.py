@@ -15,7 +15,7 @@ def fetch_poverty_population_relation():
     start_year = request.args.get('start_year')
     end_year = request.args.get('end_year')
 
-    q = Poverty_Demographics_Query.format(state=state, start_year = start_year, end_year=end_year)
+    q = Poverty_Demographics_Query.format(state=state, start_year=start_year, end_year=end_year)
 
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
@@ -30,37 +30,28 @@ def fetch_poverty_population_relation():
     
     for result in results:
         year = result[0]
-        total_population = result[3]
         total_african_american_population_percentage = result[4]
         total_american_indian_population_percentage = result[5]
         total_caucasian_population_percentage = result[6]
         total_asian_american_population_percentage = result[7]
         total_hawaiian_population_percentage = result[8]
         total_hispanic_population_percentage = result[9]
-        total_non_hispanic_population_percentage = result[10]
 
-        total_poverty = result[11]
-        total_poverty_percentage = result[12] 
-        total_poverty_under_18 = result[13]
-        total_poverty_under_18_percentage = result[14] 
-        total_poverty_over_18 = result[15]
-        total_poverty_over_18_percentage = result[16] 
-        average_household_income = result[17]
+        total_poverty_percentage = result[12]
+        total_poverty_under_18_percentage = result[14]
+        total_poverty_over_18_percentage = result[16]
 
         if year not in response_data:
-            response_data[year] = {"year": year, "total_population": total_population,
+            response_data[year] = {"year": year,
                                    "total_african_american_population_percentage": total_african_american_population_percentage,
                                    "total_american_indian_population_percentage": total_american_indian_population_percentage,
                                    "total_asian_american_population_percentage": total_asian_american_population_percentage,
                                    "total_caucasian_population_percentage": total_caucasian_population_percentage,
                                    "total_hawaiian_population_percentage": total_hawaiian_population_percentage,
                                    "total_hispanic_population_percentage": total_hispanic_population_percentage,
-                                   "total_non_hispanic_population_percentage": total_non_hispanic_population_percentage,
-                                   "total_poverty": total_poverty,"total_poverty_under_18": total_poverty_under_18,
+                                   "total_poverty_percentage": total_poverty_percentage,
                                    "total_poverty_under_18_percentage": total_poverty_under_18_percentage,
-                                   "total_poverty_over_18": total_poverty_over_18,
-                                   "total_poverty_over_18_percentage": total_poverty_over_18_percentage,
-                                   "average_house_hold_income": average_household_income}
+                                   "total_poverty_over_18_percentage": total_poverty_over_18_percentage}
 
     final_output = sorted(list(response_data.values()), key=lambda x: x['year'])
     return jsonify(final_output)

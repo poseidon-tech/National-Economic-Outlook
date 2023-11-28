@@ -280,7 +280,6 @@ Poverty_Demographics_Query = """
                     SUM(Demo.overall_18_24 + Demo.overall_25_44 + Demo.overall_45_64 + Demo.overall_65) as total_population_over_18,
                     ROUND(SUM(Demo.african_american)/SUM(Demo.total)*100,2) as total_african_american_population_percentage,
                     ROUND(SUM(Demo.american_indian)/SUM(Demo.total)*100,2) as total_american_indian_population_percentage,
-                    
                     ROUND(SUM(Demo.caucasian)/SUM(Demo.total)*100,2) as total_caucasian_population_percentage,
                     ROUND(SUM(Demo.asian_american)/SUM(Demo.total)*100,2) as total_asian_american_population_percentage,
                     ROUND(SUM(Demo.hawaiian)/SUM(Demo.total)*100,2) as total_hawaiian_population_percentage,
@@ -295,8 +294,7 @@ Poverty_Demographics_Query = """
                     INNER JOIN 
                         "HARSHITH.KUMAR".State S
                     ON
-                        S.fips = CF.state_fips
-                        
+                        S.fips = CF.state_fips   
                     GROUP BY
                         Demo.year,S.name,S.fips
                     ORDER BY 
