@@ -6,16 +6,17 @@ import neo.query.utils as utils
 
 bp = Blueprint('signup', __name__, url_prefix='/signup')
 
+
 @bp.route('', methods=['GET'])
 def fetch_signup():
 
-    user_name = request.args.get('user_name')
+    username = request.args.get('username')
     password = request.args.get('password') 
     user_type = request.args.get("user_type")
 
-    credentials = "SELECT user_name from login_table where user_name IN '{user_name}'"
+    credentials = """SELECT user_name from "HARSHITH.KUMAR".Users where user_name IN '{user_name}'"""
 
-    query = credentials.format(user_name = user_name)
+    query = credentials.format(username=username)
 
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
@@ -25,10 +26,10 @@ def fetch_signup():
     cursor.close
     
     if len(result) == 0:
+        insert = """INSERT INTO "HARSHITH.KUMAR".Users (username, password, user_type) VALUES 
+        ('{username}', '{password}', '{user_type}')"""
 
-        insert = "INSERT INTO login_table (user_name, password, user_type) VALUES ('{user_name}', '{password}', '{user_type}')"
-
-        query = insert.format(user_name = user_name, password = password, user_type = user_type)
+        query = insert.format(usernam=username, password=password, user_type=user_type)
 
         cursor = conn.cursor()
         cursor.execute(query)
@@ -36,14 +37,8 @@ def fetch_signup():
         
         cursor.close
 
-        output = {"Success":1}
-
+        output = {"Success": 1}
     else:
-
-    
-
-        output = {"Success":0}
-
-        #return redirect("/login")   
+        output = {"Success": 0}
     
     return jsonify(output)

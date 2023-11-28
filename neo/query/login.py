@@ -8,30 +8,23 @@ bp = Blueprint('login', __name__, url_prefix='/login')
 
 @bp.route('', methods=['GET'])
 def fetch_login():
-    user_name = request.args.get('username')
-    password = request.args.get('password') 
-
-    print(user_name,password)
+    username = request.args.get('username')
+    password = request.args.get('password')
     
-    login_credentials = "SELECT user_name from login_table where user_name IN '{user_name}' AND password IN '{password}'"
+    login = """SELECT username from HARSHITH.KUMAR".Users where username IN '{username}' AND password IN 
+    '{password}'"""
 
-    query = login_credentials.format(user_name = user_name,password = password)
+    query = login.format(username=username, password=password)
 
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
-
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close
     
     if len(result) == 0:
-
-        output = {"Success":0}
-
+        output = {"Success": 0}
     else:
+        output = {"Success": 1}
 
-        output = {"Success":1}
-
-
-    
     return jsonify(output)
