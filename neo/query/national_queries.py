@@ -68,7 +68,6 @@ ORDER BY year ASC
 """
 
 National_Poverty_Demographic_Query = """
-
 SELECT 
     Demo_T.Year,
     Demo_T.Total_Population,
@@ -109,8 +108,7 @@ SELECT
                     SUM(Demo.overall_0_4 + Demo.overall_5_17) AS total_population_under_18,
                     SUM(Demo.overall_18_24 + Demo.overall_25_44 + Demo.overall_45_64 + Demo.overall_65) as total_population_over_18,
                     ROUND(SUM(Demo.african_american)/SUM(Demo.total)*100,2) as total_african_american_population_percentage,
-                    ROUND(SUM(Demo.american_indian)/SUM(Demo.total)*100,2) as total_american_indian_population_percentage,
-                    
+                    ROUND(SUM(Demo.american_indian)/SUM(Demo.total)*100,2) as total_american_indian_population_percentage,              
                     ROUND(SUM(Demo.caucasian)/SUM(Demo.total)*100,2) as total_caucasian_population_percentage,
                     ROUND(SUM(Demo.asian_american)/SUM(Demo.total)*100,2) as total_asian_american_population_percentage,
                     ROUND(SUM(Demo.hawaiian)/SUM(Demo.total)*100,2) as total_hawaiian_population_percentage,
@@ -122,7 +120,6 @@ SELECT
                         "HARSHITH.KUMAR".County_Fips CF
                     ON 
                         Demo.county_fips = CF.fips
-
                     GROUP BY
                         Demo.year
                     ORDER BY 
