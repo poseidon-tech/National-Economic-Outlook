@@ -7,12 +7,13 @@ import neo.query.utils as utils
 bp = Blueprint('signup', __name__, url_prefix='/signup')
 
 
-@bp.route('', methods=['GET'])
+@bp.route('', methods=['POST'])
 def fetch_signup():
+    request_data = request.json
 
-    username = request.args.get('username')
-    password = request.args.get('password') 
-    user_type = request.args.get("user_type")
+    username = request_data['username']
+    password = request_data['password']
+    user_type = 'user'
 
     credentials = """SELECT user_name from "HARSHITH.KUMAR".Users where user_name IN '{user_name}'"""
 

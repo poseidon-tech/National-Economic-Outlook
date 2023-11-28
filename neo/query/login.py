@@ -6,10 +6,12 @@ import neo.query.utils as utils
 bp = Blueprint('login', __name__, url_prefix='/login')
 
 
-@bp.route('', methods=['GET'])
+@bp.route('', methods=['POST'])
 def fetch_login():
-    username = request.args.get('username')
-    password = request.args.get('password')
+    request_data = request.json
+
+    username = request_data['username']
+    password = request_data['password']
     
     login = """SELECT username from HARSHITH.KUMAR".Users where username IN '{username}' AND password IN 
     '{password}'"""
