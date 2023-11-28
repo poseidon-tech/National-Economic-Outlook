@@ -365,5 +365,5 @@ FROM (
     )
 ) 
 WHERE year <= {end_year} AND year >= {start_year}
-ORDER BY year ASC;
+ORDER BY year ASC
 """

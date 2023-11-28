@@ -21,7 +21,7 @@ def fetch_gini_coefficient():
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
 
-    cursor.execute(q)
+    cursor.execute(q, state_list)
     results = cursor.fetchall()
     cursor.close
 
@@ -36,8 +36,7 @@ def fetch_gini_coefficient():
         if year not in response_data:
             response_data[year] = {"year": year}
 
-        response_data[year]["state"] = state
-        response_data[year]["gini_coefficient"] = gini_coeff
+        response_data[year][state] = gini_coeff
 
     final_output = sorted(list(response_data.values()), key=lambda x: x['year'])
     return jsonify(final_output)
