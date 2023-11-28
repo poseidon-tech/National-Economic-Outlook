@@ -35,7 +35,7 @@ def fetch_industry_gdp_relation():
         gdp = result[2]
         growth = result[3]
         normalized_gdp, unit = utils.normalize_gdp(gdp)
-        print(gdp, normalized_gdp, unit)
+        # print(gdp, normalized_gdp, unit)
 
         if year not in response_data:
             response_data[year] = {"year": year, "gdp": normalized_gdp, "unit": unit}
