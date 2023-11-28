@@ -66,7 +66,7 @@ def get_query3_range():
         FROM "HARSHITH.KUMAR".Homelessness
         UNION
         SELECT MAX(year) as max, MIN(year) as min
-        FROM "HARSHITH.KUMAR".Demographic)
+        FROM "HARSHITH.KUMAR".Demographic
         UNION
         SELECT MAX(year) as max, MIN(year) as min
         FROM "HARSHITH.KUMAR".Mortgage)
