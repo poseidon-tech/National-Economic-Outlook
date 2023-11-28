@@ -1,7 +1,7 @@
 Industry_Gdp_Query = """
 SELECT 
     Curr.year as Year,Curr.iname as Industry_Name,
-    Gdp_per_year.Total_Gdp/1000000000 as Total_Gdp,
+    Gdp_per_year.Total_Gdp as Total_Gdp,
     (Curr.Total_Annual_Pay - Prev.Total_Annual_Pay)/Prev.Total_Annual_Pay * 100 as Growth
 FROM
     (SELECT

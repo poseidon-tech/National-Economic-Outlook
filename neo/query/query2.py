@@ -16,10 +16,8 @@ def fetch_poverty_population_relation():
     start_year = request.args.get('start_year')
     end_year = request.args.get('end_year')
 
-
     if state == 'all':
         q = National_Poverty_Demographic_Query.format(start_year=start_year, end_year=end_year)
-
     else:
         q = Poverty_Demographics_Query.format(state=state, start_year=start_year, end_year=end_year)
 
@@ -36,16 +34,15 @@ def fetch_poverty_population_relation():
     
     for result in results:
         year = result[0]
-        total_african_american_population_percentage = result[1]
-        total_american_indian_population_percentage = result[2]
-        total_caucasian_population_percentage = result[3]
-        total_asian_american_population_percentage = result[4]
-        total_hawaiian_population_percentage = result[5]
-        total_hispanic_population_percentage = result[6]
-
-        total_poverty_percentage = result[9]
-        total_poverty_under_18_percentage = result[11]
-        total_poverty_over_18_percentage = result[13]
+        total_african_american_population_percentage = result[2]
+        total_american_indian_population_percentage = result[3]
+        total_caucasian_population_percentage = result[4]
+        total_asian_american_population_percentage = result[5]
+        total_hawaiian_population_percentage = result[6]
+        total_hispanic_population_percentage = result[7]
+        total_poverty_percentage = result[10]
+        total_poverty_under_18_percentage = result[12]
+        total_poverty_over_18_percentage = result[14]
 
         if year not in response_data:
             response_data[year] = {"year": year,

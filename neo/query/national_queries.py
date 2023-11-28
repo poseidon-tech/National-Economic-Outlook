@@ -126,8 +126,5 @@ SELECT
                         Demo.year
                 ) DEMO_T
             ON Poverty_T.year = Demo_T.year          
-    )
-    
-
-
+    )WHERE Demo_T.year >= {start_date} AND Demo_T.year <= {end_date}
 """
