@@ -234,7 +234,6 @@ GROUP BY
 """
 
 Poverty_Demographics_Query = """
-
     SELECT 
     Demo_T.Year,Demo_T.State_Name,
     Demo_T.State_Code,
@@ -305,6 +304,66 @@ Poverty_Demographics_Query = """
                 ) DEMO_T
             ON Poverty_T.State_Name = Demo_T.State_Name AND Poverty_T.State_Code = Demo_T.State_Code AND Poverty_T.year = Demo_T.year          
     ) WHERE Demo_T.State_Name = '{state}' AND Demo_T.year >= {start_year} AND Demo_T.year <= {end_year}
+"""
 
-
+Gini_Coefficient_Query = """
+SELECT 
+    state_name AS state, 
+    year, 
+    ((lorenz_curve/mean_income)/10) AS gini_coefficient
+FROM (
+    SELECT 
+        state_name, 
+        year, 
+        mean_income,
+        SQRT((POWER(ca_income - mean_income, 2) + POWER(af_income - mean_income, 2) + POWER(ai_income - mean_income, 2) +
+        POWER(as_income - mean_income, 2) + POWER(ha_income - mean_income, 2) + POWER(hi_income - mean_income, 2))/6) AS lorenz_curve
+    FROM (
+        SELECT state_name, year,
+            ca_income,
+            af_income,
+            ai_income,
+            as_income,
+            ha_income,
+            hi_income,
+            (ca_income + af_income + ai_income + as_income + ha_income + hi_income)/6 AS mean_income
+        FROM (
+            SELECT 
+                state_name,
+                year,
+                AVG(income) AS income,
+                AVG((caucasian/population)*income) AS ca_income,
+                AVG((african_american/population)*income) AS af_income,
+                AVG((american_indian/population)*income) AS ai_income,
+                AVG((asian_american/population)*income) AS as_income,
+                AVG((hawaiian/population)*income) AS ha_income,
+                AVG((hispanic/population)*income) AS hi_income
+            FROM "HARSHITH.KUMAR".DEMOGRAPHIC NATURAL JOIN (
+                SELECT *
+                FROM (
+                        SELECT 
+                            "HARSHITH.KUMAR".STATE.name AS state_name, 
+                            "HARSHITH.KUMAR".COUNTY_FIPS.fips AS county_fips,
+                            population
+                        FROM "HARSHITH.KUMAR".COUNTY_FIPS 
+                        JOIN "HARSHITH.KUMAR".STATE 
+                        ON "HARSHITH.KUMAR".STATE.fips = "HARSHITH.KUMAR".COUNTY_FIPS.state_fips
+                        JOIN "HARSHITH.KUMAR".COUNTY
+                        ON "HARSHITH.KUMAR".COUNTY.fips = "HARSHITH.KUMAR".COUNTY_FIPS.fips
+                        WHERE "HARSHITH.KUMAR".STATE.Name IN ({bind_states})
+                )NATURAL JOIN (
+                    SELECT 
+                        year, 
+                        county_fips, 
+                        median_household_income AS income
+                    FROM "HARSHITH.KUMAR".POVERTY
+                )
+            )GROUP BY  
+                year, 
+                state_name
+        )
+    )
+) 
+WHERE year <= {end_year} AND year >= {start_year}
+ORDER BY year ASC;
 """

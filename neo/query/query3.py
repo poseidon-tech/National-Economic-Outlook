@@ -6,6 +6,8 @@ from neo.query.national_queries import National_Homelessness_Mortgage_Query
 import neo.query.utils as utils
 
 bp = Blueprint('query3', __name__, url_prefix='/query3')
+
+
 @bp.route('', methods=['GET'])
 def fetch_homelessness_mortgage_relation():
     state = request.args.get('state')
@@ -16,7 +18,6 @@ def fetch_homelessness_mortgage_relation():
     if state == 'all':
         q = National_Homelessness_Mortgage_Query.format(start_year=start_year, end_year=end_year)
 
-    print(q)
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
 
