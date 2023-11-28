@@ -60,7 +60,6 @@ def get_all_states():
     for row in results:
         response_json[row[0]] = row[1]
 
-
     return jsonify(response_json)
 
 
