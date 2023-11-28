@@ -1,8 +1,6 @@
 from flask import current_app as app
 from flask import jsonify, request
 from flask import Blueprint
-from flask import redirect
-import neo.query.utils as utils
 
 bp = Blueprint('signup', __name__, url_prefix='/signup')
 
@@ -15,7 +13,7 @@ def fetch_signup():
     password = request_data['password']
     user_type = 'user'
 
-    credentials = """SELECT username from "HARSHITH.KUMAR".Users where user_name IN '{username}'"""
+    credentials = """SELECT username from "HARSHITH.KUMAR".Users where username IN '{username}'"""
 
     query = credentials.format(username=username)
 
@@ -30,7 +28,7 @@ def fetch_signup():
         insert = """INSERT INTO "HARSHITH.KUMAR".Users (username, password, user_type) VALUES 
         ('{username}', '{password}', '{user_type}')"""
 
-        query = insert.format(usernam=username, password=password, user_type=user_type)
+        query = insert.format(username=username, password=password, user_type=user_type)
 
         cursor = conn.cursor()
         cursor.execute(query)

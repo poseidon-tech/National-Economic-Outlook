@@ -1,7 +1,6 @@
 from flask import current_app as app
 from flask import jsonify, request
 from flask import Blueprint
-import neo.query.utils as utils
 
 bp = Blueprint('login', __name__, url_prefix='/login')
 
