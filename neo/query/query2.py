@@ -6,11 +6,11 @@ import neo.query.utils as utils
 
 bp = Blueprint('query2', __name__, url_prefix='/query2')
 
+
 @bp.route('', methods=['GET'])
-def fetch_industry_gdp_relation():
+def fetch_poverty_population_relation():
 
     state = request.args.get('state')
-    print(state)
     
     start_year = request.args.get('start_year')
     end_year = request.args.get('end_year')
@@ -45,37 +45,29 @@ def fetch_industry_gdp_relation():
         total_poverty_under_18_percentage = result[14] 
         total_poverty_over_18 = result[15]
         total_poverty_over_18_percentage = result[16] 
-        Average_HouseHold_Income = result[17]
+        average_household_income = result[17]
 
         if year not in response_data:
-            response_data[year] = {"year": year, "total_population": total_population, "total_african_american_population_percentage" : total_african_american_population_percentage, "total_american_indian_population_percentage":total_american_indian_population_percentage,"total_asian_american_population_percentage": total_asian_american_population_percentage, "total_caucasian_population_percentage": total_caucasian_population_percentage,"total_hawaiian_population_percentage" : total_hawaiian_population_percentage,"total_hispanic_population_percentage": total_hispanic_population_percentage,"total_non_hispanic_population_percentage":total_non_hispanic_population_percentage,"total_poverty":total_poverty,"total_poverty_under_18":total_poverty_under_18,"total_poverty_under_18_percentage":total_poverty_under_18_percentage,"total_poverty_over_18":total_poverty_over_18,"total_poverty_over_18_percentage":total_poverty_over_18_percentage,"Average_HouseHold_Income":Average_HouseHold_Income}
-
-            
+            response_data[year] = {"year": year, "total_population": total_population,
+                                   "total_african_american_population_percentage": total_african_american_population_percentage,
+                                   "total_american_indian_population_percentage": total_american_indian_population_percentage,
+                                   "total_asian_american_population_percentage": total_asian_american_population_percentage,
+                                   "total_caucasian_population_percentage": total_caucasian_population_percentage,
+                                   "total_hawaiian_population_percentage": total_hawaiian_population_percentage,
+                                   "total_hispanic_population_percentage": total_hispanic_population_percentage,
+                                   "total_non_hispanic_population_percentage": total_non_hispanic_population_percentage,
+                                   "total_poverty": total_poverty,"total_poverty_under_18": total_poverty_under_18,
+                                   "total_poverty_under_18_percentage": total_poverty_under_18_percentage,
+                                   "total_poverty_over_18": total_poverty_over_18,
+                                   "total_poverty_over_18_percentage": total_poverty_over_18_percentage,
+                                   "average_house_hold_income": average_household_income}
 
     final_output = sorted(list(response_data.values()), key=lambda x: x['year'])
     return jsonify(final_output)
 
 
-# Common route to get states for all queries. Move to a common blueprint if time permits
-@bp.route('/get_all_states', methods=['GET'])
-def get_all_states():
-    conn = app.config['DB_CONN']
-    cursor = conn.cursor()
-    cursor.execute("""
-    SELECT name
-    FROM "HARSHITH.KUMAR".State
-    """)
-
-    results = cursor.fetchall()
-    cursor.close()
-    for row in results:
-        print(row)
-
-    return jsonify({"list_of_states": results})
-
-
 @bp.route('/year_range', methods=['GET'])
-def get_query1_range():
+def get_query2_range():
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
     
