@@ -27,6 +27,9 @@ def register_blueprints(app: Flask):
     from neo.query import query3
     from neo.query import query4
     from neo.query import query5
+    from neo.query import login
+    from neo.query import signup
+
 
     app.register_blueprint(count_query.bp)
     app.register_blueprint(query1.bp)
@@ -34,4 +37,9 @@ def register_blueprints(app: Flask):
     app.register_blueprint(query3.bp)
     app.register_blueprint(query4.bp)
     app.register_blueprint(query5.bp)
+    app.register_blueprint(login.bp)
+    app.register_blueprint(signup.bp)
+
+
+
 

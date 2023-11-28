@@ -235,8 +235,7 @@ GROUP BY
 
 Poverty_Demographics_Query = """
     SELECT 
-    Demo_T.Year,Demo_T.State_Name,
-    Demo_T.State_Code,
+    Demo_T.Year,
     Demo_T.Total_Population,
     Demo_T.total_african_american_population_percentage,
     Demo_T.total_american_indian_population_percentage,

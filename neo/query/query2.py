@@ -2,6 +2,7 @@ from flask import current_app as app
 from flask import jsonify, request
 from flask import Blueprint
 from neo.query.all_queries import Poverty_Demographics_Query
+from neo.query.national_queries import National_Poverty_Demographic_Query
 import neo.query.utils as utils
 
 bp = Blueprint('query2', __name__, url_prefix='/query2')
@@ -15,7 +16,12 @@ def fetch_poverty_population_relation():
     start_year = request.args.get('start_year')
     end_year = request.args.get('end_year')
 
-    q = Poverty_Demographics_Query.format(state=state, start_year=start_year, end_year=end_year)
+
+    if state == 'all':
+        q = National_Poverty_Demographic_Query.format(start_year=start_year, end_year=end_year)
+
+    else:
+        q = Poverty_Demographics_Query.format(state=state, start_year=start_year, end_year=end_year)
 
     conn = app.config['DB_CONN']
     cursor = conn.cursor()
@@ -30,16 +36,16 @@ def fetch_poverty_population_relation():
     
     for result in results:
         year = result[0]
-        total_african_american_population_percentage = result[4]
-        total_american_indian_population_percentage = result[5]
-        total_caucasian_population_percentage = result[6]
-        total_asian_american_population_percentage = result[7]
-        total_hawaiian_population_percentage = result[8]
-        total_hispanic_population_percentage = result[9]
+        total_african_american_population_percentage = result[1]
+        total_american_indian_population_percentage = result[2]
+        total_caucasian_population_percentage = result[3]
+        total_asian_american_population_percentage = result[4]
+        total_hawaiian_population_percentage = result[5]
+        total_hispanic_population_percentage = result[6]
 
-        total_poverty_percentage = result[12]
-        total_poverty_under_18_percentage = result[14]
-        total_poverty_over_18_percentage = result[16]
+        total_poverty_percentage = result[9]
+        total_poverty_under_18_percentage = result[11]
+        total_poverty_over_18_percentage = result[13]
 
         if year not in response_data:
             response_data[year] = {"year": year,
