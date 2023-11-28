@@ -15,7 +15,7 @@ def fetch_signup():
     password = request_data['password']
     user_type = 'user'
 
-    credentials = """SELECT user_name from "HARSHITH.KUMAR".Users where user_name IN '{user_name}'"""
+    credentials = """SELECT username from "HARSHITH.KUMAR".Users where user_name IN '{username}'"""
 
     query = credentials.format(username=username)
 
