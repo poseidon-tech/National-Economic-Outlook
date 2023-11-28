@@ -13,7 +13,7 @@ def fetch_login():
     username = request_data['username']
     password = request_data['password']
     
-    login = """SELECT username from HARSHITH.KUMAR".Users where username IN '{username}' AND password IN 
+    login = """SELECT username from "HARSHITH.KUMAR".Users where username IN '{username}' AND password IN 
     '{password}'"""
 
     query = login.format(username=username, password=password)
